@@ -14,6 +14,11 @@ public class Process {
     public int turnaroundTime;
     public int responseTime;
 
+    // Used by Tier 2 (priority) and the aging mechanism.
+    // Lower number = higher priority. Aging lowers effectivePriority over time.
+    public int effectivePriority;
+    public int waitingSince = -1;   // time the process started waiting in Tier 2
+
     public Process(String id, int arrivalTime, int burstTime, int Priority) {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("Process ID cannot be empty.");
@@ -27,6 +32,7 @@ public class Process {
         this.burstTime = burstTime;
         this.Priority = Priority;
         this.remainingBurst = burstTime;
+        this.effectivePriority = Priority;
     }
 
     public Process copy() {

@@ -2,6 +2,11 @@ import java.util.*;
 
 public class Tier1RoundRobin {
 
+    // Filled in by run(): the time Tier 1 finished and the last process it ran.
+    // Tier 2 starts from here.
+    static int endTime = 0;
+    static Process lastProcess = null;
+
     // Runs Tier 1 (Round Robin). Finished processes get completionTime, firstStartTime
     // and their metrics calculated. Returns the processes that used a full quantum
     // and must move to Tier 2.
@@ -44,11 +49,14 @@ public class Tier1RoundRobin {
                 p.completionTime = time;
                 p.calculateMetrics();
             } else {
+                p.waitingSince = time;   // moment of demotion = start of waiting in Tier 2
                 demoted.add(p);
             }
             last = p;
         }
 
+        endTime = time;
+        lastProcess = last;
         return demoted;
     }
 }
